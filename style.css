@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
 
+/* GERAL */
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +12,10 @@
   --primary-color: hsl(170, 100%, 26%);
   --secondary--color-headline: hsl(210, 11%, 15%);
   --secondary--color-paragraph: hsl(210, 9%, 31%);
-
+  --brand-bege: hsl(39, 100%, 97%);
+  --brand-light: hsl(148, 23%, 89%);
+  --nav-height: 7.2rem;
+  --nav-scroll-color: hsl(0, 0%, 100%);
   font-size: 62.5%; 
   /* 
   Transformamos 1rem em 10px. 
@@ -20,19 +24,53 @@
   */
 }
 
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family: var(--DM-Sans-font);
   font-size: 1.6rem;
   text-align: center;
+
+  overflow: overlay; /* sobrepoê todo o conteúdo e ignora a margem de scroll */
 }
 
-header {
+.wrapper {
   width: 37.5rem;
   margin: 0 auto;
-  margin-top: 4.1rem;
+  padding-inline: 2.4rem;
 }
 
-p {
+ul {
+  list-style: none; /* remove a lista de todas as propriedades ul */
+}
+
+
+/* HEADER */
+
+header {
+  margin-top: calc(4.1rem + var(--nav-height));
+}
+
+/* construindo uuma tag html pelo CSS */
+header::before { /* antes do conteúdo do header */
+  content: "";
+  width: 100%;
+  height: calc(108rem + var(--nav-height));
+  display: block;
+  background-color: var(--brand-light);
+  
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+header p {
   font-size: 1.8rem;
   line-height: 150%;
   font-weight: 400;
@@ -40,20 +78,20 @@ p {
   margin-bottom: 3.2rem;
 }
 
-h1 {
+header h1 {
   font-size: 3.4rem;
   color: var(--secondary--color-headline);
   line-height: 130%;
   margin-bottom: 2.4rem;
 }
 
-h4 {
+header h4 {
   font-size: 1.4rem;
   color: var(--primary-color);
   margin-bottom: 1.6rem;
 }
 
-button {
+header button {
   background-color: var(--primary-color);
   border: none;
   border-radius: 4rem;
@@ -78,4 +116,192 @@ button {
   margin-right: auto;
   margin-left: auto; 
   */
+}
+
+header img {
+  display: block;
+  width: 26.3rem;
+  margin-inline: auto;
+  object-position: 0 2rem;
+}
+
+
+
+.stats {
+  width: 32.7rem;
+  
+  padding-block: 4rem; /* altera o eixo y */
+  
+  margin-inline: auto; /* referente ao eixo x */
+
+  background-color: var(--brand-bege);
+  border: 1px solid var(--brand-light);
+  border-radius: 0.6rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6.0rem;
+
+}
+
+.stat h3 {
+  font-size: 4.8rem;
+  color: var(--secondary--color-headline);
+  line-height: 130%;
+
+  margin-bottom: 0.4rem;
+
+
+}
+
+.stat p {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.6rem;
+  line-height: 150%;
+}
+
+/* NAVIGATION */
+nav {
+  display: flex;
+
+  height: var(--nav-height);
+  /* padding: 1.6rem 2.4rem; */
+  /* 
+  padding-inline: 2.4rem;  altera o eixo x 
+  padding-block: 1.6rem;  altera o eixo y  
+  */
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+
+  /* 
+  calcular metade do elemento pra cada lado equilibrado 
+  através do translatex, ele sabe calcular o tamanho total do elemento
+  */
+  transform: translateX(-50%); 
+}
+
+nav .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav.scroll {
+  background: var(--primary-color);
+  width: 100vw;
+}
+
+nav.scroll svg:nth-child(1) path {
+  fill: var(--white);
+}
+
+nav.scroll button path {
+  stroke: var(--white);
+}
+
+nav button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* MENU EXPANDED */
+body.menu-expanded {
+  overflow: hidden; /* overflow significa que está transbordando e quando aplicamos o hidden removemos as barras do eixo X e Y */
+}
+
+/* todos de primeiro nível com sumir com exceção do nav */
+body.menu-expanded > :not(nav) {
+  display: none;
+
+}
+
+.menu,
+.close-menu, 
+body.menu-expanded .open-menu {
+  opacity: 0; /* fará com que o menu fique invisivel */
+  visibility: hidden; /* fará a visibilidade dele ficar escondida. Ou seja, não dará mais para interagir com o menu */
+}
+
+body.menu-expanded .menu, 
+body.menu-expanded .close-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+body.menu-expanded .menu{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--primary-color);
+
+  width: 100vw;
+  height: 100vh;
+
+  padding-top: var(--nav-height);
+}
+
+body.menu-expanded nav {
+  position: relative;
+}
+
+.menu ul:nth-child(1) {
+  display: flex;
+  flex-direction: column;
+  gap: 4.8rem;
+
+  margin-top: 6rem;
+
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 3.1rem;
+}
+
+.menu ul li a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.menu .button {
+  background: var(--white);
+  border-radius: 4rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 2.3rem;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  color: var(--primary-color);
+
+  display: inline-block;
+  padding: 16px 32px;
+
+  margin-top: 4.8rem;
+  margin-bottom: 8rem;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.2rem; 
+}
+
+body.menu-expanded .logo,
+body.menu-expanded nav button {
+  position: relative;
+  z-index: 100;
+}
+
+body.menu-expanded .logo path {
+  fill: var(--white);
+}
+
+body.menu-expanded button path {
+  stroke: var(--white);
 }
