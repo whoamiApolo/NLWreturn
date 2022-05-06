@@ -16,7 +16,9 @@
   --brand-light: hsl(148, 23%, 89%);
   --nav-height: 7.2rem;
   --nav-scroll-color: hsl(0, 0%, 100%);
-  font-size: 62.5%; 
+  --background-light: hsl(180, 14%, 97%);
+
+  font-size: 62.5%;
   /* 
   Transformamos 1rem em 10px. 
   Motivo: Acessibilidade
@@ -24,6 +26,9 @@
   */
 }
 
+html {
+  scroll-behavior: smooth; /* movimento suave do scroll */
+}
 
 html,
 body {
@@ -37,6 +42,8 @@ body {
   text-align: center;
 
   overflow: overlay; /* sobrepoê todo o conteúdo e ignora a margem de scroll */
+
+  background-color: var(--background-light);
 }
 
 .wrapper {
@@ -49,117 +56,42 @@ ul {
   list-style: none; /* remove a lista de todas as propriedades ul */
 }
 
-
-/* HEADER */
-
-header {
-  margin-top: calc(4.1rem + var(--nav-height));
+img {
+  max-width: 100%;
 }
 
-/* construindo uuma tag html pelo CSS */
-header::before { /* antes do conteúdo do header */
-  content: "";
-  width: 100%;
-  height: calc(108rem + var(--nav-height));
-  display: block;
-  background-color: var(--brand-light);
-  
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
+section {
+  padding-block: 10rem;
 }
 
-header p {
-  font-size: 1.8rem;
-  line-height: 150%;
-  font-weight: 400;
-  color: var(--secondary--color-paragraph);
-  margin-bottom: 3.2rem;
-}
-
-header h1 {
+section header h1 {
   font-size: 3.4rem;
   color: var(--secondary--color-headline);
   line-height: 130%;
   margin-bottom: 2.4rem;
 }
 
-header h4 {
+section header h2 {
+  font-size: 3rem;
+  line-height: 3.9rem;
+
+  color: var(--secondary--color-headline);
+}
+
+section header h4 {
   font-size: 1.4rem;
   color: var(--primary-color);
   margin-bottom: 1.6rem;
-}
-
-header button {
-  background-color: var(--primary-color);
-  border: none;
-  border-radius: 4rem;
-  /* margin-bottom: 6rem; */
-
-  height: 5.2rem;
-  width: 26.3rem;
-
-  color: var(--white);
-
-  font-size: 1.4rem;
+  line-height: 150%;
+  letter-spacing: 0.08rem;
   text-transform: uppercase;
-  font-weight: 700;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.6rem; /* espaço entre os elementos */
-
-  margin: 0 auto 6rem;
-  /* 
-  margin-right: auto;
-  margin-left: auto; 
-  */
 }
 
-header img {
-  display: block;
-  width: 26.3rem;
-  margin-inline: auto;
-  object-position: 0 2rem;
-}
-
-
-
-.stats {
-  width: 32.7rem;
-  
-  padding-block: 4rem; /* altera o eixo y */
-  
-  margin-inline: auto; /* referente ao eixo x */
-
-  background-color: var(--brand-bege);
-  border: 1px solid var(--brand-light);
-  border-radius: 0.6rem;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6.0rem;
-
-}
-
-.stat h3 {
-  font-size: 4.8rem;
-  color: var(--secondary--color-headline);
-  line-height: 130%;
-
-  margin-bottom: 0.4rem;
-
-
-}
-
-.stat p {
-  margin: 0;
-  color: var(--primary-color);
+section .content p {
+  font-weight: 400;
   font-size: 1.6rem;
   line-height: 150%;
+  color: var(--secondary--color-paragraph)
 }
 
 /* NAVIGATION */
@@ -175,13 +107,13 @@ nav {
 
   position: fixed;
   top: 0;
-  left: 50%;
-
-  /* 
+  width: 100vw;
+  /* left: 50%;
   calcular metade do elemento pra cada lado equilibrado 
   através do translatex, ele sabe calcular o tamanho total do elemento
-  */
-  transform: translateX(-50%); 
+  transform: translateX(-50%);  */
+
+  z-index: 1; /* devido a utilização do ScrollReveal() no JS foi necessário adicionar o z-index no navbar */
 }
 
 nav .wrapper {
@@ -192,10 +124,9 @@ nav .wrapper {
 
 nav.scroll {
   background: var(--primary-color);
-  width: 100vw;
 }
 
-nav.scroll svg:nth-child(1) path {
+nav.scroll .logo path {
   fill: var(--white);
 }
 
@@ -216,25 +147,28 @@ body.menu-expanded {
 
 /* todos de primeiro nível com sumir com exceção do nav */
 body.menu-expanded > :not(nav) {
-  display: none;
-
+  /* display: none; */
+  visibility: hidden;
 }
 
 .menu,
-.close-menu, 
+.close-menu,
 body.menu-expanded .open-menu {
   opacity: 0; /* fará com que o menu fique invisivel */
   visibility: hidden; /* fará a visibilidade dele ficar escondida. Ou seja, não dará mais para interagir com o menu */
 }
 
-body.menu-expanded .menu, 
+body.menu-expanded .menu,
 body.menu-expanded .close-menu {
   opacity: 1;
   visibility: visible;
 }
 
+body .menu {
+  transform: translateY(100%);
+}
 
-body.menu-expanded .menu{
+body.menu-expanded .menu {
   position: fixed;
   top: 0;
   left: 0;
@@ -244,12 +178,15 @@ body.menu-expanded .menu{
   height: 100vh;
 
   padding-top: var(--nav-height);
+
+  transition: transform 500ms;
+  transform: translateY(0%);
 }
 
-body.menu-expanded nav {
+/* body.menu-expanded nav {
   position: relative;
 }
-
+ */
 .menu ul:nth-child(1) {
   display: flex;
   flex-direction: column;
@@ -289,7 +226,7 @@ body.menu-expanded nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3.2rem; 
+  gap: 3.2rem;
 }
 
 body.menu-expanded .logo,
@@ -304,4 +241,138 @@ body.menu-expanded .logo path {
 
 body.menu-expanded button path {
   stroke: var(--white);
+}
+
+/* HOME */
+#home {
+  padding-top: calc(4.1rem + var(--nav-height));
+}
+
+/* construindo uuma tag html pelo CSS */
+#home::before {
+  /* antes do conteúdo do header */
+  content: '';
+  width: 100%;
+  height: calc(108rem + var(--nav-height));
+  display: block;
+  background-color: var(--brand-light);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+#home p {
+  font-size: 1.8rem;
+  line-height: 150%;
+  font-weight: 400;
+  color: var(--secondary--color-paragraph);
+  margin-bottom: 3.2rem;
+}
+
+
+
+#home button {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 4rem;
+  /* margin-bottom: 6rem; */
+
+  height: 5.2rem;
+  width: 26.3rem;
+
+  color: var(--white);
+
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem; /* espaço entre os elementos */
+
+  margin: 0 auto 6rem;
+  /* 
+  margin-right: auto;
+  margin-left: auto; 
+  */
+}
+
+#home img {
+  display: block;
+  width: 26.3rem;
+  margin-inline: auto;
+  object-position: 0 2rem;
+}
+
+#home .stats {
+  width: 32.7rem;
+
+  padding-block: 4rem; /* altera o eixo y */
+
+  margin-inline: auto; /* referente ao eixo x */
+
+  background-color: var(--brand-bege);
+  border: 1px solid var(--brand-light);
+  border-radius: 0.6rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6rem;
+}
+
+#home .stat h3 {
+  font-size: 4.8rem;
+  color: var(--secondary--color-headline);
+  line-height: 130%;
+
+  margin-bottom: 0.4rem;
+}
+
+#home .stat p {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.6rem;
+  line-height: 150%;
+}
+
+/* SERVICES */
+#services header h2 {
+  margin-bottom: 6rem;
+}
+
+#services .cards {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+#services .card {
+  border: 1px solid var(--brand-light);
+  border-radius: 0.6rem;
+
+  padding: 2.4rem;
+  text-align: left;
+
+  background: var(--white);
+}
+
+#services .card h3 {
+  margin-block: 1.6rem; /* altera o eixo Y */
+}
+
+/* ABOUT */
+#about {
+  text-align: left;
+}
+#about header h2 {
+  margin-bottom: 2.4rem;
+}
+
+#about .content p {
+  margin-bottom: 6rem;
+  margin-top: 2.4rem;
 }
