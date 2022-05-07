@@ -1,10 +1,26 @@
+window.addEventListener('scroll', onScroll)
+
+onScroll()
 function onScroll() {
+  showNavOnScroll()
+  showBackToTopButtonOnScroll()
+}
+
+function showNavOnScroll() {
   console.log(scrollY > 0)
   /* a propriedade scrollY - retornar o posicionamento exato do meu scroll */
   if(scrollY > 0) {
     navigation.classList.add('scroll')
   } else {
     navigation.classList.remove('scroll')
+  }
+}
+
+function showBackToTopButtonOnScroll() {
+  if(scrollY > 500) {
+    backToTopButton.classList.add('show')
+  } else {
+    backToTopButton.classList.remove('show')
   }
 }
 
